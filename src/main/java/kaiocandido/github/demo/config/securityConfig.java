@@ -13,8 +13,12 @@ public class securityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests( auth->
-                        auth.anyRequest().authenticated())
+                .authorizeHttpRequests( auth->{
+                        auth.requestMatchers("/cursos/java").hasRole("vizualizar-curso-java");
+                        auth.requestMatchers("/cursos/spring-boot").hasRole("vizualizar-curso-spring-boot");
+                        auth.requestMatchers("/cursos/gratuitos").permitAll();
+                        auth.anyRequest().authenticated();
+                })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
